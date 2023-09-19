@@ -1,5 +1,10 @@
 name: Get and Cache dependencies
 description: this is being done to demonstrate the feature of custom composite action
+inputs:
+  caching:
+    description: 'Whether caching is needed or not'
+    required: false
+    default: 'true'
 runs:
   using: 'composite'
   steps:
@@ -10,6 +15,6 @@ runs:
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
       run: npm ci
       shell: bash
